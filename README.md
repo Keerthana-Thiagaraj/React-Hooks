@@ -1,8 +1,4 @@
-## React File Upload example with Axios & Boostrap
-
-For more detail, please visit:
-
-> [React File Upload with Axios & Boostrap Progress Bar](https://bezkoder.com/react-file-upload-spring-boot/)
+## React Hooks
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
