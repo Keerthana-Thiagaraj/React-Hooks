@@ -9,36 +9,38 @@ function Register(props) {
     const [userPhoneNo, setUserPhoneNo] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [userCountry, setUserCountry] = useState('');
+    const [error, setError] = useState({});
+
 
     function OnSignUp() {
         console.log("inside signup")
-            let allUsers = []
-            let dataFromStorage = JSON.parse(localStorage.getItem("registeredUsers"))
-            if (dataFromStorage && dataFromStorage.length)
-                allUsers = dataFromStorage
-            let userExist = false
-            allUsers.map((item) => {  // note the syntax of map for looping the array
-                if (item.email === userEmail)
-                    userExist = true     // note the usage of == and === ,https://www.geeksforgeeks.org/difference-between-and-operator-in-javascript/
-            })
-            if (!userExist) {
-                let userDetails = {   // object declaration
-                    name: username,
-                    email: userEmail,
-                    country: userCountry,
-                    phoneno: userPhoneNo
-                }
-                allUsers.push(userDetails)
-                console.log("all users", allUsers)
-                localStorage.setItem('registeredUsers', JSON.stringify(allUsers))
-            } else {
-                alert("user already exists")
+        let allUsers = []
+        let dataFromStorage = JSON.parse(localStorage.getItem("registeredUsers"))
+        if (dataFromStorage && dataFromStorage.length)
+            allUsers = dataFromStorage
+        let userExist = false
+        allUsers.map((item) => {  // note the syntax of map for looping the array
+            if (item.email === userEmail)
+                userExist = true     // note the usage of == and === ,https://www.geeksforgeeks.org/difference-between-and-operator-in-javascript/
+        })
+        if (!userExist) {
+            let userDetails = {   // object declaration
+                name: username,
+                email: userEmail,
+                country: userCountry,
+                phoneno: userPhoneNo
             }
-            setUserName('')
-            setUserEmail('')
-            setUserPhoneNo('')
-            setUserPassword('')
-            setUserCountry('')
+            allUsers.push(userDetails)
+            console.log("all users", allUsers)
+            localStorage.setItem('registeredUsers', JSON.stringify(allUsers))
+        } else {
+            alert("user already exists")
+        }
+        setUserName('')
+        setUserEmail('')
+        setUserPhoneNo('')
+        setUserPassword('')
+        setUserCountry('')
     }
 
     function goToLogin() {
@@ -47,17 +49,37 @@ function Register(props) {
 
     function onChangeUserName(e) {
 
-        console.log("validating")
-        if (isValidUserName(e)) {
-            setUserName(e.target.value)
+        setUserName(e.target.value)
 
-        }
-        else
-            alert("enter username")
-        return false
     }
 
+    function onValidate() {
+        let err = Object.assign({}, error)
+        if (!isValidUserName(username)) {
+            err.name = "please enter username"
+            setError(err)
+        } else {
+            err.name = ""
+            setError(err)
+        }
+    }
 
+    function validateSignUp() {
+        let hasError = false
+        let err = Object.assign({}, error)
+            if (!isValidUserName(username)) {
+                hasError=true
+                err.name = "please enter username"
+                setError(err)
+            } else {
+                err.name = ""
+                setError(err)
+            }
+        
+        if (!hasError) {
+            OnSignUp()
+        }
+    }
 
     return (
         <div>
@@ -65,8 +87,10 @@ function Register(props) {
             <div>
                 <div className="cellContainer">Name:</div>
                 <div>
-                    <input type="text" value={username} onChange={(e) => onChangeUserName(e)}></input> {/* note the input tags*/}
+                    <input type="text" value={username} onChange={(e) => onChangeUserName(e)} onBlur={onValidate}></input> {/* note the input tags*/}
+                    <span>{error.name}</span>
                 </div>
+
             </div>
             <div>
                 <div className="cellContainer">Email:</div>
@@ -100,7 +124,7 @@ function Register(props) {
             </div>
             <div>
                 <div >
-                    <button onClick={() => OnSignUp()}>SignUp</button> {/*note the observance of function -> () usages  */}
+                    <button onClick={() => validateSignUp()}>SignUp</button> {/*note the observance of function -> () usages  */}
                 </div>
             </div>
             <div>
