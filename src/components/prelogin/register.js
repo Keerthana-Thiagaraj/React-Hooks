@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '../../assets/css/register.css'
-import { isValidUserName } from '../../Utils'
+import { isValidUserName, isValidPhoneNumber, isValidEmail } from '../../Utils'
 
 function Register(props) {
 
@@ -48,9 +48,23 @@ function Register(props) {
     }
 
     function onChangeUserName(e) {
-
         setUserName(e.target.value)
+    }
 
+    function onChangeEmail(e){
+        setUserEmail(e.target.value)
+    }
+
+    function onChangePhone(e){
+        setUserPhoneNo(e.target.value)
+    }
+
+    function onChangeCountry(e){
+        setUserCountry(e.target.value)
+    }
+
+    function onChangePassword(e){
+        setUserPassword(e.target.value)
     }
 
     function onValidate() {
@@ -58,8 +72,14 @@ function Register(props) {
         if (!isValidUserName(username)) {
             err.name = "please enter username"
             setError(err)
-        } else {
-            err.name = ""
+        } else if(!isValidPhoneNumber(userPhoneNo)){
+            err.name="please enter phone no"
+            setError(err)
+        }else if(!isValidEmail(userEmail)){
+            err.name="please enter a valid email"
+            setError(err)
+        }else{
+            err.name=""
             setError(err)
         }
     }
@@ -71,10 +91,19 @@ function Register(props) {
                 hasError=true
                 err.name = "please enter username"
                 setError(err)
-            } else {
-                err.name = ""
+            } 
+            if (!isValidEmail(userEmail)) {
+                hasError=true
+                err.name = "please enter valid email"
                 setError(err)
-            }
+            } 
+
+            if (!isValidPhoneNumber(userPhoneNo)) {
+                hasError=true
+                err.name = "please enter valid phone no"
+                setError(err)
+            } 
+
         
         if (!hasError) {
             OnSignUp()
@@ -82,7 +111,7 @@ function Register(props) {
     }
 
     return (
-        <div>
+        <div className="Register">
             <h2>register</h2>
             <div>
                 <div className="cellContainer">Name:</div>
@@ -95,19 +124,19 @@ function Register(props) {
             <div>
                 <div className="cellContainer">Email:</div>
                 <div >
-                    <input type="text" value={userEmail} onChange={(e) => setUserEmail(e.target.value)}></input>
+                    <input type="text" value={userEmail} onChange={(e) => onChangeEmail(e)}></input>
                 </div>
             </div>
             <div >
                 <div className="cellContainer">PhoneNo:</div>
                 <div>
-                    <input type="text" value={userPhoneNo} onChange={(e) => setUserPhoneNo(e.target.value)}></input>
+                    <input type="text" value={userPhoneNo} onChange={(e) => onChangePhone(e)}></input>
                 </div>
             </div>
             <div>
                 <div className="cellContainer">Password:</div>
                 <div>
-                    <input type="password" value={userPassword} onChange={(e) => setUserPassword(e.target.value)}></input>
+                    <input type="password" value={userPassword} onChange={(e) => onChangePassword(e)}></input>
                 </div>
             </div>
 
